@@ -1,14 +1,23 @@
 import itertools
 
 # a directional graph
+# multiple arrows not supported (ignored)
+# see: https://en.wikipedia.org/wiki/Glossary_of_graph_theory_terms
+# and: https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)#Directed_graph
 class Graph:
 
     def __init__(self, vertices, edges):
         self.vertices = vertices
         self.edges = edges
 
+    #TODO good practice? Is empty edges list finite or infinite :P?
+    @classmethod
+    def is_finite(cls):
+        return True
+
     # coherence means there is a connection to every node of the vertices.
     # the direction of this connection does not matter -> see strong coherence
+    # TODO name is connected instead?
     def is_coherent(self):
         # graphs with no vertices / only one are always coherent
         if len(self.vertices) <= 1:
@@ -46,24 +55,17 @@ class Graph:
         visited = list(itertools.repeat(False, len(self.vertices)))
         return is_coherent_helper(0)
 
-    # TODO description
+    # a graph is strong coherent if it is coherent
+    # and for every (v, w, 0) in graphs edges, there also exists (w,v,0)
+    # TODO name it strong_connected instead?
     def is_strong_coherent(self):
-        print("not implemented yet")
-        # TODO implementation of def is_strong_coherent
-        return True;
+        if self.is_coherent() and self.is_symmetric():
+            return True
+        return False
 
-    # simple graphs do not have slings
-    def is_simple(self):
-        if any(e[0] == e[1] for e in self.edges):
-            return False
-        return True
+    # TODO is complete
 
-    # TODO description
-    def is_tree(self):
-        if self.is_simple() and not self.has_circle():
-            return True;
-        return False;
-
+    # TODO verify
     # TODO description
     def has_circle(self):
         # graphs with no/one/two vertices cannot contain circle
@@ -110,11 +112,86 @@ class Graph:
                 return True
         return False
 
+    # simple graphs do not have slings / loops
+    # (loop: arrows that connect vertices to themselves)
+    def is_simple(self):
+        if any(e[0] == e[1] for e in self.edges):
+            return False
+        return True
 
-g = Graph(["a", "b", "c", "d", "e", "f"],[("a", "b", 0), ("a", "c", 0), ("b", "d", 0),
+    # TODO verify
+    # TODO description
+    def is_reflexive(self):
+        # iterate through all verticles
+        for v in self.vertices:
+            # if edges does not contain the the loop for v, return false
+            if all(v != e[0] and v != e[0] for e in self.edges):
+                return False
+        # otherwise all verticles have a loop
+        return True
+
+    # TODO verify
+    # directed graphs where all edges are bidirected
+    # (bidirected: for every arrow that belongs to the digraph, the corresponding inversed arrow also belongs to it)
+    def is_symmetrical(self):
+        # iterate through all edges
+        for e in self.edges:
+            # if edges does not contain the inversed arrow to e, return false
+            if all(e[0] != i[1] and e[1] != i[0] for i in self.edges):
+                return False
+        # otherwise all edges are bidirected
+        return True
+
+    # TODO verify
+    # directed graphs where no edge is bidirected and where no loops exist
+    def is_asymmetrical(self):
+        # if not simple -> a loop exists -> not asymmetrical
+        if not self.is_simple():
+            return False
+        # iterate through all edges
+        for e in self.edges:
+            # if edges does not contain any inversed arrow to e, return false
+            if all(e[0] != i[1] and e[1] != i[0] for i in self.edges):
+                return False
+        # otherwise all edges are bidirected
+        return True
+
+    # TODO is_antisymmetrical
+
+    # TODO is_transitive
+
+    # TODO description
+    def get_root(self):
+        # TODO implementation
+        return None
+
+    # TODO verify
+    # trees have a root node from where you can reach every other node, but they do not contain circle
+    def is_tree(self):
+        if self.is_simple() and not self.has_circle() and not self.get_root() is None:
+            return True
+        return False
+
+    # TODO get Spannbaum
+
+
+# TODO unit testing
+g = Graph(["a", "b", "c", "d", "e", "f"],[("a", "b", 0),("a", "c", 0), ("b", "d", 0),
                                           ("b", "e", 0), ("e", "f", 0)])
+
 print("is coherent: {}".format(g.is_coherent()))
 print("is strong coherent: {}".format(g.is_strong_coherent()))
+print("is symmetric: {}".format(g.is_symmetric()))
 print("is tree: {}".format(g.is_tree()))
 print("is simple: {}".format(g.is_simple()))
 print("has circle: {}".format(g.has_circle()))
+
+h = Graph(["a", "b", "c", "d"],[("a", "b", 0),("b", "a", 0), ("a", "c", 0), ("c", "a", 0), ("b", "d", 0), ("d", "b", 0)])
+
+print("is coherent: {}".format(h.is_coherent()))
+print("is strong coherent: {}".format(h.is_strong_coherent()))
+print("is symmetric: {}".format(h.is_symmetric()))
+print("is tree: {}".format(h.is_tree()))
+print("is simple: {}".format(h.is_simple()))
+print("has circle: {}".format(h.has_circle()))
+
