@@ -1,5 +1,6 @@
 import itertools
 
+
 # a directional graph
 # multiple arrows not supported (ignored)
 # see: https://en.wikipedia.org/wiki/Glossary_of_graph_theory_terms
@@ -59,7 +60,7 @@ class Graph:
     # and for every (v, w, 0) in graphs edges, there also exists (w,v,0)
     # TODO name it strong_connected instead?
     def is_strong_coherent(self):
-        if self.is_coherent() and self.is_symmetric():
+        if self.is_coherent() and self.is_symmetrical():
             return True
         return False
 
@@ -173,25 +174,3 @@ class Graph:
         return False
 
     # TODO get Spannbaum
-
-
-# TODO unit testing
-g = Graph(["a", "b", "c", "d", "e", "f"],[("a", "b", 0),("a", "c", 0), ("b", "d", 0),
-                                          ("b", "e", 0), ("e", "f", 0)])
-
-print("is coherent: {}".format(g.is_coherent()))
-print("is strong coherent: {}".format(g.is_strong_coherent()))
-print("is symmetric: {}".format(g.is_symmetric()))
-print("is tree: {}".format(g.is_tree()))
-print("is simple: {}".format(g.is_simple()))
-print("has circle: {}".format(g.has_circle()))
-
-h = Graph(["a", "b", "c", "d"],[("a", "b", 0),("b", "a", 0), ("a", "c", 0), ("c", "a", 0), ("b", "d", 0), ("d", "b", 0)])
-
-print("is coherent: {}".format(h.is_coherent()))
-print("is strong coherent: {}".format(h.is_strong_coherent()))
-print("is symmetric: {}".format(h.is_symmetric()))
-print("is tree: {}".format(h.is_tree()))
-print("is simple: {}".format(h.is_simple()))
-print("has circle: {}".format(h.has_circle()))
-
