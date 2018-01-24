@@ -27,7 +27,7 @@ class GraphTestCase(unittest.TestCase):
 
     @staticmethod
     def get_simple_circle_graph():
-        return Graph(["a", "b", "c", "d", "e", "f"], [("a", "b", 0), ("a", "c", 0), ("b", "d", 0),
+        return Graph(["a", "b", "c", "d", "e", "f"], [("a", "b", 0), ("c", "a", 0), ("b", "d", 0),
                                                ("b", "e", 0), ("e", "f", 0), ("d", "e", 0), ("e", "c", 0)])
 
     @staticmethod
@@ -68,6 +68,17 @@ class GraphTestCase(unittest.TestCase):
         self.assertFalse(self.get_weird_tree_graph().is_strong_coherent())
         self.assertFalse(self.get_loose_complex_graph().is_strong_coherent())
         self.assertTrue(self.get_bidirectional_graph().is_strong_coherent())
+
+    def test_has_circle(self):
+        self.assertFalse(self.get_empty_graph().has_circle())
+        self.assertFalse(self.get_simple_single_node_graph().has_circle())
+        self.assertFalse(self.get_single_node_graph().has_circle())
+        self.assertFalse(self.get_no_edge_graph().has_circle())
+        self.assertTrue(self.get_simple_connected_graph().has_circle())
+        self.assertTrue(self.get_simple_circle_graph().has_circle())
+        self.assertFalse(self.get_weird_tree_graph().has_circle())
+        self.assertFalse(self.get_loose_complex_graph().has_circle())
+        self.assertFalse(self.get_bidirectional_graph().has_circle())
 
 
 if __name__ == '__main__':

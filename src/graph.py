@@ -66,8 +66,7 @@ class Graph:
 
     # TODO is complete
 
-    # TODO verify
-    # TODO description
+    # a circle is a path of at least three nodes that start and end at the same node
     def has_circle(self):
         # graphs with no/one/two vertices cannot contain circle
         if len(self.vertices) <= 2:
@@ -102,6 +101,8 @@ class Graph:
                     # next call using the neighbour node
                     if has_circle_helper(self.vertices.index(e[1])):
                         return True
+                    # important: delete last hop as it was not helpful in building a the circle
+                    visited[self.vertices.index(e[1])] = False
             # if no edges neighbour returned true -> the graph is not coherent
             return False
         # iterate through all vertices
@@ -131,14 +132,16 @@ class Graph:
         # otherwise all verticles have a loop
         return True
 
-    # TODO verify
     # directed graphs where all edges are bidirected
     # (bidirected: for every arrow that belongs to the digraph, the corresponding inversed arrow also belongs to it)
     def is_symmetrical(self):
         # iterate through all edges
+        # loop works as follows:
+        # if it exists e where no i exists that is the the inversed arrow -> not symmetrical
+        # equivalent to if exists e where all i are the inversed arrow -> not symmetrical
         for e in self.edges:
             # if edges does not contain the inversed arrow to e, return false
-            if all(e[0] != i[1] and e[1] != i[0] for i in self.edges):
+            if all(e[0] != i[1] or e[1] != i[0] for i in self.edges):
                 return False
         # otherwise all edges are bidirected
         return True
