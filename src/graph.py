@@ -114,22 +114,35 @@ class Graph:
                 return True
         return False
 
-    # simple graphs do not have slings / loops
-    # (loop: arrows that connect vertices to themselves)
+    # simple graphs are bidirected / symmetrical
+    # and do not have slings / loops
+    # (loop / sling: arrows that connect vertices to themselves)
     def is_simple(self):
-        if any(e[0] == e[1] for e in self.edges):
+        if len(self.vertices) == 0:
+            return True
+        if self.has_sling() or not self.is_symmetrical():
             return False
         return True
 
-    # TODO verify
-    # TODO description
+    # sling: arrows that connect vertices to themselves
+    # for example: (v,v,0) with v element of V
+    def has_sling(self):
+        if any(e[0] == e[1] for e in self.edges):
+            return True
+        return False
+
+    # a graph is reflexive if all vertices have slings
     def is_reflexive(self):
-        # iterate through all verticles
+        if len(self.vertices) == 0:
+            return True
+        if len(self.edges) == 0:
+            return False
+        # iterate through all vertices
         for v in self.vertices:
-            # if edges does not contain the the loop for v, return false
-            if all(v != e[0] and v != e[0] for e in self.edges):
+            # if edges do not contain the loop / sling for v, return false
+            if all(v != e[0] or v != e[1] for e in self.edges):
                 return False
-        # otherwise all verticles have a loop
+        # otherwise all vertices have a loop
         return True
 
     # directed graphs where all edges are bidirected
@@ -144,6 +157,7 @@ class Graph:
             if all(e[0] != i[1] or e[1] != i[0] for i in self.edges):
                 return False
         # otherwise all edges are bidirected
+        # if vertices or edges contain zero elements -> return True
         return True
 
     # TODO verify
