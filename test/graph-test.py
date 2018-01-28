@@ -137,6 +137,29 @@ class GraphTestCase(unittest.TestCase):
         self.assertTrue(self.get_bidirectional_graph().is_symmetrical())
         self.assertTrue(self.get_bidirectional_reflexive_graph().is_symmetrical())
 
+    def test_is_asymmetrical(self):
+        self.assertTrue(self.get_empty_graph().is_asymmetrical())
+        self.assertTrue(self.get_simple_single_node_graph().is_asymmetrical())
+        self.assertFalse(self.get_single_node_graph().is_asymmetrical())
+        self.assertTrue(self.get_no_edge_graph().is_asymmetrical())
+        self.assertTrue(self.get_connected_graph().is_asymmetrical())
+        self.assertTrue(self.get_circle_graph().is_asymmetrical())
+        self.assertTrue(self.get_weird_tree_graph().is_asymmetrical())
+        self.assertFalse(self.get_loose_complex_graph().is_asymmetrical())
+        self.assertFalse(self.get_bidirectional_graph().is_asymmetrical())
+        self.assertFalse(self.get_bidirectional_reflexive_graph().is_asymmetrical())
+
+    def test_is_antisymmetrical(self):
+        self.assertTrue(self.get_empty_graph().is_antisymmetrical())
+        self.assertTrue(self.get_simple_single_node_graph().is_antisymmetrical())
+        self.assertTrue(self.get_single_node_graph().is_antisymmetrical())
+        self.assertTrue(self.get_no_edge_graph().is_antisymmetrical())
+        self.assertTrue(self.get_connected_graph().is_antisymmetrical())
+        self.assertTrue(self.get_circle_graph().is_antisymmetrical())
+        self.assertTrue(self.get_weird_tree_graph().is_antisymmetrical())
+        self.assertTrue(self.get_loose_complex_graph().is_antisymmetrical())
+        self.assertFalse(self.get_bidirectional_graph().is_antisymmetrical())
+        self.assertFalse(self.get_bidirectional_reflexive_graph().is_antisymmetrical())
 
 if __name__ == '__main__':
     unittest.main()

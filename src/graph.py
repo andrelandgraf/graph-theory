@@ -145,6 +145,8 @@ class Graph:
         # otherwise all vertices have a loop
         return True
 
+    # important: a graph that is not symmetrical may not be asymmetrical or antisymmetrical,
+    #            non could be the case
     # directed graphs where all edges are bidirected
     # (bidirected: for every arrow that belongs to the digraph, the corresponding inversed arrow also belongs to it)
     def is_symmetrical(self):
@@ -160,23 +162,49 @@ class Graph:
         # if vertices or edges contain zero elements -> return True
         return True
 
-    # TODO verify
+    # important: a graph that is not symmetrical may not be asymmetrical or antisymmetrical,
+    #            non could be the case
     # directed graphs where no edge is bidirected and where no loops exist
     def is_asymmetrical(self):
-        # if not simple -> a loop exists -> not asymmetrical
-        if not self.is_simple():
+        # if has sling -> a loop exists -> not asymmetrical
+        if self.has_sling():
             return False
         # iterate through all edges
         for e in self.edges:
-            # if edges does not contain any inversed arrow to e, return false
-            if all(e[0] != i[1] and e[1] != i[0] for i in self.edges):
+            # if edges contain any inversed arrow to e, return false
+            if any(e[0] == i[1] and e[1] == i[0] for i in self.edges):
                 return False
-        # otherwise all edges are bidirected
+        # otherwise all edges are not bidirected
         return True
 
-    # TODO is_antisymmetrical
+    # important: a graph that is not symmetrical may not be asymmetrical or antisymmetrical,
+    #            non could be the case
+    # directed graphs where no edge is bidirected but loops / slings are allowed
+    def is_antisymmetrical(self):
+        # iterate through all edges
+        for e in self.edges:
+            # if edges contain any inversed arrow to e,
+            # which is not a sling / loop, return false
+            if any(e[0] == i[1] and e[1] == i[0]
+                   and self.edges.index(e) != self.edges.index(i) for i in self.edges):
+                return False
+        # otherwise all edges are not bidirected
+        return True
 
-    # TODO is_transitive
+    # TODO verify
+    # transitive: if (u,v) and (v,w) elements of edges,
+    # then (u,w) element of edges as well
+    def is_transitive(self):
+        # graphs with no/one/two vertices cannot contain transitive relations
+        # apart from (u, u) + (u, w) -> (u, w)... trivial
+        if len(self.vertices) <= 2:
+            return True
+        # graphs with no/one/two edges cannot contain transitive relations
+        if len(self.edges) <= 2:
+            return True
+        # iterate through all vertices
+        # TODO recrusive
+        return False
 
     # TODO description
     def get_root(self):
@@ -184,9 +212,9 @@ class Graph:
         return None
 
     # TODO verify
-    # trees have a root node from where you can reach every other node, but they do not contain circle
+    # trees have a root node from where you can reach every other node, but they do not contain circles nor slings
     def is_tree(self):
-        if self.is_simple() and not self.has_circle() and not self.get_root() is None:
+        if not self.has_sling() and not self.has_circle() and not self.get_root() is None:
             return True
         return False
 
