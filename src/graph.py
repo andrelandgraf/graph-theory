@@ -195,16 +195,19 @@ class Graph:
     # transitive: if (u,v) and (v,w) elements of edges,
     # then (u,w) element of edges as well
     def is_transitive(self):
-        # graphs with no/one/two vertices cannot contain transitive relations
-        # apart from (u, u) + (u, w) -> (u, w)... trivial
+        # TODO
+        # Graphs with 2 vertices can be a transitive relationship: (a,b), (b,a), (a,a), (b,b)
+        # (a -> b -> a also a -> a)
+        # (b -> a -> b also b -> b)
+        # -> if symmetrical and reflexive -> is transitive!
         if len(self.vertices) <= 2:
             return True
         # graphs with no/one/two edges cannot contain transitive relations
         if len(self.edges) <= 2:
-            return True
+            return False
         # iterate through all vertices
         # TODO recrusive
-        return False
+        return True
 
     # TODO description
     def get_root(self):
