@@ -8,6 +8,8 @@ import itertools
 class Graph:
 
     def __init__(self, vertices, edges):
+        # TODO array.count((a,b)) tells you quickly how often a tuple is part of verticles / edges -> delete copies as
+        # we do ignore multi edges
         self.vertices = vertices
         self.edges = edges
 
