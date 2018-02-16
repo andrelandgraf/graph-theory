@@ -37,7 +37,7 @@ class Graph:
             v = self.vertices[i]
             visited[i] = True
             # Base Case: if all vertices have been visited, we can return true
-            if all(v is True for v in visited):
+            if all(visited):
                 return True
             # loop through all edges and find those who have v as one side
             for e in self.edges:
@@ -55,7 +55,7 @@ class Graph:
             # if no edges neighbour returned true -> the graph is not coherent
             return False
         # init visited array and start recrusive helper with index = 0
-        visited = list(itertools.repeat(False, len(self.vertices)))
+        visited = [False] * len(self.vertices)
         return is_coherent_helper(0)
 
     # a graph is strong coherent if it is coherent
@@ -111,7 +111,7 @@ class Graph:
         for v in self.vertices:
             # init visited array and start recrusive helper
             # important: reset list visited in every iteration
-            visited = list(itertools.repeat(False, len(self.vertices)))
+            visited = [False] * len(self.vertices)
             if has_circle_helper(self.vertices.index(v)):
                 return True
         return False
@@ -129,9 +129,7 @@ class Graph:
     # sling: arrows that connect vertices to themselves
     # for example: (v,v,0) with v element of V
     def has_sling(self):
-        if any(e[0] == e[1] for e in self.edges):
-            return True
-        return False
+        return any(e[0] == e[1] for e in self.edges):
 
     # a graph is reflexive if all vertices have slings
     def is_reflexive(self):
